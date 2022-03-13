@@ -1,0 +1,31 @@
+{
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://wpackagist.org",
+			"only": [
+				"wpackagist-plugin/*",
+				"wpackagist-theme/*"
+			]
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0",
+		"wpackagist-plugin/wordpress-seo": ">=17.5",
+		"wpackagist-plugin/advanced-custom-fields": ">=5.10.2",
+		"wpackagist-plugin/all-in-one-wp-security-and-firewall": ">=4.4.9",
+		"wpackagist-plugin/svg-support": ">=2.3.19"
+	},
+	"extra": {
+		"installer-paths": {
+			"wp-content/plugins/{$name}/": [
+				"type:wordpress-plugin"
+			],
+			"wp-content/themes/{$name}/": [
+				"type:wordpress-theme"
+			]
+		}
+	}
+}

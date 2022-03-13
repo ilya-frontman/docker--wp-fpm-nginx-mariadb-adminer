@@ -1,0 +1,8 @@
+/wordpress/
+
+/db/
+
+/env/admin.env
+
+/themes/*
+!/themes/sample
