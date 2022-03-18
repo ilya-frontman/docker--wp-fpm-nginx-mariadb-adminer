@@ -21,7 +21,13 @@ volumes:
       type: none
       device: ${PWD}/themes
       o: bind
-      
+  
+  WP_PHP_INI:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/php-config
+      o: bind
       
 
 services:
@@ -48,6 +54,7 @@ services:
     volumes:
       - WP_DATA:/var/www/html:rw
       - WP_THEME:/var/www/html/wp-content/themes:rw
+      - WP_PHP_INI:/usr/local/etc/php:rw
     ports:
       - 8080:80
     depends_on:
