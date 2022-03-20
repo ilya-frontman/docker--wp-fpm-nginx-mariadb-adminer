@@ -21,14 +21,6 @@ volumes:
       type: none
       device: ${PWD}/themes
       o: bind
-  
-  WP_PHP_INI:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/php-config
-      o: bind
-      
 
 services:
 
@@ -41,7 +33,7 @@ services:
     command: update
 
   wp:
-    image: wordpress:latest
+    image: wordpress
     restart: unless-stopped
     container_name: wp
     env_file: 
@@ -54,9 +46,9 @@ services:
     volumes:
       - WP_DATA:/var/www/html:rw
       - WP_THEME:/var/www/html/wp-content/themes:rw
-      - WP_PHP_INI:/usr/local/etc/php:rw
+      - ./php/php.ini:/usr/local/etc/php/php.ini:rw
     ports:
-      - 8080:80
+      - 80:80
     depends_on:
       - db
       - composer
@@ -73,11 +65,11 @@ services:
       - MYSQL_DATA:/var/lib/mysql:rw
 
   pma:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin
     restart: unless-stopped
     container_name: pma
     links:
-      - db:db
+      - db
     ports:
       - 8081:80
     depends_on:
