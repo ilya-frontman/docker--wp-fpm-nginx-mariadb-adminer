@@ -18,6 +18,9 @@
 # external dir for themes directory original path (wordpress/wp-content/themes)
 /themes/*
 
+# external dir for plugins directory original path (wordpress/wp-content/plugins)
+/plugins/*
+
 # don't ignore your theme directory or git subfolder, uncommit and change with your theme name
 #!/themes/your_theme_name
 

@@ -22,6 +22,13 @@ volumes:
       device: ${PWD}/themes
       o: bind
 
+  WP_PLUGIN:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/plugins
+      o: bind
+
 services:
 
   composer:
@@ -46,6 +53,7 @@ services:
     volumes:
       - WP_DATA:/var/www/html:rw
       - WP_THEME:/var/www/html/wp-content/themes:rw
+      - WP_PLUGIN:/var/www/html/wp-content/plugins:rw
       - ./php/php.ini:/usr/local/etc/php/php.ini:rw
     ports:
       - 80:80
