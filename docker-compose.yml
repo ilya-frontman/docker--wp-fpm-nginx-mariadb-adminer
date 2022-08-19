@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 volumes:
   MYSQL_DATA:
@@ -30,20 +30,19 @@ volumes:
       o: bind
 
 services:
-
   composer:
     image: composer
     container_name: composer
     volumes:
       - ./composer/composer.json:/app/composer.json
-      - WP_DATA:/app:rw
+      - WP_PLUGIN:/app:rw
     command: update
 
   wp:
     image: wordpress
     restart: unless-stopped
     container_name: wp
-    env_file: 
+    env_file:
       - ./env/wp.env
     environment:
       WORDPRESS_DB_HOST: db
