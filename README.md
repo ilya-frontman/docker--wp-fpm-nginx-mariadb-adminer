@@ -4,8 +4,8 @@
 
 ## About build:
 
-- composer (insert plugins for headless cms)
-- docker-compose hold all wp and db files localy on your host mashine
+- composer (insert plugins in mount drive plugins)
+- docker-compose hold all wp (themes and plugins external) and db files localy on your host mashine
 - example 'env/files' config for wp and db services
 
 ## How start
