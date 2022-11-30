@@ -1,4 +1,4 @@
-# Wordpress-Starter-Env
+# Docker-Nginx-WP(FPM-ALPINE)-MariaDB-Adminer
 
 > Simple docker env, for local development.
 
