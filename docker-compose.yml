@@ -1,83 +1,62 @@
 version: "3"
 
-volumes:
-  MYSQL_DATA:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/db
-      o: bind
-
-  WP_DATA:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/wordpress
-      o: bind
-
-  WP_THEME:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/themes
-      o: bind
-
-  WP_PLUGIN:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/plugins
-      o: bind
-
 services:
   composer:
-    image: composer
-    container_name: composer
+    image: composer:latest
     volumes:
       - ./composer/composer.json:/app/composer.json
-      - WP_PLUGIN:/app:rw
+      - ./plugins:/app:rw
     command: update
 
-  wp:
-    image: wordpress
-    restart: unless-stopped
-    container_name: wp
-    env_file:
-      - ./env/wp.env
-    environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_NAME: wordpress
-    links:
-      - db
+  nginx_web:
+    image: nginx:alpine
+    restart: always
     volumes:
-      - WP_DATA:/var/www/html:rw
-      - WP_THEME:/var/www/html/wp-content/themes:rw
-      - WP_PLUGIN:/var/www/html/wp-content/plugins:rw
-      - ./php/php.ini:/usr/local/etc/php/php.ini:rw
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./wordpress:/var/www/html:rw
     ports:
-      - 80:80
+      - $NGINX_PORT:$NGINX_PORT
+    links:
+      - wp_fpm
+
+  wp_fpm:
+    image: wordpress:fpm-alpine
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=mariadb
+      - WORDPRESS_DB_NAME=$DB_NAME
+      - WORDPRESS_DB_USER=$DB_USER
+      - WORDPRESS_DB_PASSWORD=$DB_PASSWORD
+      - WORDPRESS_TABLE_PREFIX=$DB_PREFIX_TABLE
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+    volumes:
+      - ./wordpress:/var/www/html:rw
+      - ./themes:/var/www/html/wp-content/themes:rw
+      - ./plugins:/var/www/html/wp-content/plugins:rw
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+    links:
+      - mariadb
     depends_on:
-      - db
+      - mariadb
       - composer
-
-  db:
-    image: mariadb
-    restart: unless-stopped
-    container_name: db
-    env_file:
-      - ./env/db.env
+    
+  mariadb:
+    image: mariadb:latest
+    restart: always
     environment:
-      MYSQL_DATABASE: wordpress
+      - MARIADB_DATABASE=$DB_NAME
+      - MARIADB_USER=$DB_USER
+      - MARIADB_PASSWORD=$DB_PASSWORD
+      - MARIADB_ROOT_PASSWORD=$DB_ROOT_PASSWORD
     volumes:
-      - MYSQL_DATA:/var/lib/mysql:rw
+      - ./db:/var/lib/mysql:rw
 
-  pma:
-    image: phpmyadmin
-    restart: unless-stopped
-    container_name: pma
-    links:
-      - db
+  adm:
+    image: adminer:latest
+    restart: always
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb
     ports:
-      - 8081:80
+      - $ADM_PORT:$ADM_PORT
     depends_on:
-      - db
+      - mariadb
