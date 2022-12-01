@@ -1,4 +1,4 @@
-# Docker-Nginx-WP(FPM-ALPINE)-MariaDB-Adminer
+# Docker-Nginx(ALPINE)-WP(FPM-ALPINE)-MariaDB-Adminer
 
 > Simple docker env, for local development.
 
@@ -28,13 +28,13 @@ docker-compose up -d
 
 And now checkout in browser:
 
-[PhpMyAdmin](http://localhost:8081)
+[Adminer](http://localhost:8080)
 
-[Wodpress Installation](http://localhost:8080)
+[Wodpress Installation: Nginx Port](http://localhost:80)
 
-> MariaDB, you should wait few seconds after run.
+> MariaDB, you should wait few seconds after run, check log messages.
 
-> Before wordpress installation checkout db access with PhpMyAdmin.
+> Before wordpress installation checkout db access with Adminer.
 
 ---
 
